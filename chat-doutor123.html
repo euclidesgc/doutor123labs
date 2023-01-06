@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head></head>
+
+<body>
+  <h1> Doutor1234 </h1>
+  <script>
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    console.log('1/4: Inciando o octadesk');
+    const nome = urlParams.get('nome');
+    const email = urlParams.get('email');
+    const cpf = urlParams.get('cpf');
+
+    console.log("nome: " + nome);
+    console.log("email: " + email);
+    console.log("cpf: " + cpf);
+
+
+    (function (o, c, t, a, d, e, s, k) {
+      console.log('1.1/4: dentro do octadesk');
+      o.octadesk = o.octadesk || {};
+      o.octadesk.chatOptions = {
+        subDomain: a,
+        showButton: d,
+        hide: 'true',
+        openOnMessage: e,
+      };
+      s = c.getElementsByTagName('body')[0];
+      k = c.createElement('script');
+      k.async = 1;
+      k.src = t;
+      s.appendChild(k);
+    })(window, document, "https://cdn.octadesk.com/embed.js", "doutor123", false, true);
+
+    function openOctaChat() {
+      console.log('3/4: openOctaChat');
+
+      if (window.octadesk && window.octadesk.chat) {
+        window.octadesk.chat.show();
+        window.octadesk.chat.showApp();
+        montarChat();
+      }
+    }
+
+    window.addEventListener('onOctaChatReady', function (e) {
+      console.log('2/4: fazendo login');
+
+      octadesk.chat.login({
+        user: { name: nome, email: email },
+        customFields: [{ id: 'cpf', value: cpf }]
+      })
+
+      openOctaChat()
+    })
+
+    function montarChat() {
+      console.log('4/4: montarChat')
+
+      var divOcta = document.getElementById('octadesk-octachat-appchat');
+      var button = document.createElement('button');
+      var text = document.createTextNode('X');
+
+      button.appendChild(text);
+      divOcta.appendChild(button);
+
+      button.setAttribute('id', 'btn-chat');
+      button.classList.add('btn');
+      button.classList.add('btn-warning');
+      button.addEventListener('click', () => {
+        window.octadesk.chat.hideApp();
+        button.parentNode.removeChild(button);
+      })
+    }
+  </script>
+</body>
+
+</html>
